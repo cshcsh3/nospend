@@ -1,0 +1,3 @@
+# nospend
+
+Minimal budget tracker
