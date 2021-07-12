@@ -7,7 +7,127 @@ class ExpensePage extends StatelessWidget {
         appBar: AppBar(
             title: Text('Add Expense')
         ),
-        body: ExpenseForm()
+        body: Categories()
+    );
+  }
+}
+
+class Categories extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return CategoriesState();
+  }
+}
+
+class CategoriesState extends State<Categories> {
+  @override
+  Widget build(BuildContext context) {
+
+    return CustomScrollView(
+      primary: false,
+      slivers: <Widget>[
+        SliverPadding(
+          padding: const EdgeInsets.all(20),
+          sliver: SliverGrid.count(
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            crossAxisCount: 4,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  children: <Widget>[
+                    IconButton(
+                      icon: const Icon(Icons.fastfood_outlined),
+                      tooltip: 'Food & Dining',
+                      onPressed: () {},
+                    ),
+                    Expanded(child: Center(child: Text('Food & Dining', style: TextStyle(fontSize: 8))))
+                  ]
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.commute_outlined),
+                        tooltip: 'Transport',
+                        onPressed: () {},
+                      ),
+                      Expanded(child: Center(child: Text('Transport', style: TextStyle(fontSize: 8))))
+                    ]
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.shopping_bag_outlined),
+                        tooltip: 'Shopping',
+                        onPressed: () {},
+                      ),
+                      Expanded(child: Center(child: Text('Shopping', style: TextStyle(fontSize: 8))))
+                    ]
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.spa_outlined),
+                        tooltip: 'Personal Care',
+                        onPressed: () {},
+                      ),
+                      Expanded(child: Center(child: Text('Personal Care', style: TextStyle(fontSize: 8))))
+                    ]
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.fitness_center_outlined),
+                        tooltip: 'Health & Fitness',
+                        onPressed: () {},
+                      ),
+                      Expanded(child: Center(child: Text('Health & Fitness', style: TextStyle(fontSize: 8))))
+                    ]
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.videogame_asset_outlined),
+                        tooltip: 'Entertainment',
+                        onPressed: () {},
+                      ),
+                      Expanded(child: Center(child: Text('Entertainment', style: TextStyle(fontSize: 8))))
+                    ]
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.library_books_outlined),
+                        tooltip: 'Education',
+                        onPressed: () {},
+                      ),
+                      Expanded(child: Center(child: Text('Education', style: TextStyle(fontSize: 8))))
+                    ]
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -44,8 +164,6 @@ class ExpenseFormState extends State<ExpenseForm> {
                   sizedBoxSpace,
                   Text('Expense category'),
                   sizedBoxSpace,
-                  Categories(),
-                  sizedBoxSpace,
                   Center(
                       child: ElevatedButton(
                           onPressed: () {},
@@ -56,79 +174,6 @@ class ExpenseFormState extends State<ExpenseForm> {
             )
         )
       )
-    );
-  }
-}
-
-class Categories extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return CategoriesState();
-  }
-}
-
-class CategoriesState extends State<Categories> with RestorationMixin {
-  final isSelected = [
-    RestorableBool(false),
-    RestorableBool(false),
-    RestorableBool(false),
-    RestorableBool(false),
-  ];
-
-  @override
-  String get restorationId => 'categories';
-
-  @override
-  void restoreState(RestorationBucket oldBucket, bool initialRestore) {
-    registerForRestoration(isSelected[0], 'item0');
-    registerForRestoration(isSelected[1], 'item1');
-    registerForRestoration(isSelected[2], 'item2');
-    registerForRestoration(isSelected[3], 'item3');
-  }
-
-  @override
-  void dispose(){
-    for (final restorableBool in isSelected){
-      restorableBool.dispose();
-    }
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ToggleButtons(
-      onPressed: (index) {
-        setState(() {
-          isSelected[index].value = !isSelected[index].value;
-        });
-      },
-      isSelected: isSelected.map((element) => element.value).toList(),
-      children: [
-        Column(
-            children: [
-              Icon(Icons.fastfood_outlined),
-              Text('Food & Dining')
-            ]
-        ),
-        Column(
-          children: [
-            Icon(Icons.commute_outlined),
-            Text('Transport')
-          ]
-        ),
-        Column(
-          children: [
-            Icon(Icons.shopping_bag_outlined),
-            Text('Shopping')
-          ]
-        ),
-        Column(
-            children: [
-              Icon(Icons.library_books_outlined),
-              Text('Education')
-            ]
-        )
-      ]
     );
   }
 }
