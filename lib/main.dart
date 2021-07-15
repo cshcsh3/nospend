@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'expense.dart';
+import 'expense_page.dart';
 
 void main() {
   runApp(MainApp());
@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+  HomePage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
