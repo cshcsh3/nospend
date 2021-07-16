@@ -1,7 +1,9 @@
 import 'dart:async';
-import 'model/expense.dart';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'model/expense.dart';
 
 class NospendDatabase {
   static final NospendDatabase instance = NospendDatabase._init();
@@ -34,13 +36,14 @@ class NospendDatabase {
     ''');
   }
 
-  Future<void> createExpense(Expense expense) async {
+  Future<bool> createExpense(Expense expense) async {
     final db = await instance.database;
-    await db.insert(
-      'expenses',
-      expense.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace
-    );
+    int id = await db.insert('expenses', expense.toMap());
+    if (id == 0) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   Future<List<Expense>> getExpenses() async {
@@ -48,10 +51,9 @@ class NospendDatabase {
     final List<Map<String, dynamic>> maps = await db.query('expenses');
     return List.generate(maps.length, (i) {
       return Expense(
-        id: maps[i]['id'],
-        amount: maps[i]['amount'],
-        category: maps[i]['category']
-      );
+          id: maps[i]['id'],
+          amount: maps[i]['amount'],
+          category: maps[i]['category']);
     });
   }
 }

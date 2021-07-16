@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:nospend/db.dart';
+
 import 'expense_page.dart';
+import 'model/expense.dart';
 
 void main() {
   runApp(MainApp());
@@ -27,11 +30,34 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late NospendDatabase db;
+
   void _navigateToExpensePage() {
     Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ExpensePage()),
+      context,
+      MaterialPageRoute(builder: (context) => ExpensePage()),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    db = NospendDatabase.instance;
+  }
+
+  Widget _expensesList(List<Expense>? expenses) {
+    List<Widget> widgets = [];
+    if (expenses != null) {
+      for (Expense expense in expenses) {
+        Widget expenseRow = Container(
+            height: 50,
+            child:
+                Text('${expense.id}: ${expense.amount} ${expense.category}'));
+        widgets.add(expenseRow);
+      }
+      return ListView(padding: const EdgeInsets.all(8), children: widgets);
+    }
+    return Text('No entry');
   }
 
   @override
@@ -40,8 +66,17 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Text('Main page')
+      body: FutureBuilder(
+        future: db.getExpenses(),
+        builder: (BuildContext context, AsyncSnapshot<List<Expense>> snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Something went wrong'));
+          }
+          if (snapshot.hasData) {
+            return _expensesList(snapshot.data);
+          }
+          return Center(child: CircularProgressIndicator());
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToExpensePage,
