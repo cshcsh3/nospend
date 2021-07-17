@@ -32,11 +32,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late NospendDatabase db;
 
-  void _navigateToExpensePage() {
-    Navigator.push(
+  void _navigateToExpensePage() async {
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ExpensePage()),
     );
+    setState(() {});
   }
 
   @override
@@ -55,9 +56,9 @@ class _HomePageState extends State<HomePage> {
                 Text('${expense.id}: ${expense.amount} ${expense.category}'));
         widgets.add(expenseRow);
       }
-      return ListView(padding: const EdgeInsets.all(8), children: widgets);
+      return ListView(padding: const EdgeInsets.all(20), children: widgets);
     }
-    return Text('No entry');
+    return Text('No expenses recorded');
   }
 
   @override
@@ -69,13 +70,16 @@ class _HomePageState extends State<HomePage> {
       body: FutureBuilder(
         future: db.getExpenses(),
         builder: (BuildContext context, AsyncSnapshot<List<Expense>> snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Center(child: CircularProgressIndicator());
+          }
           if (snapshot.hasError) {
             return Center(child: Text('Something went wrong'));
           }
           if (snapshot.hasData) {
             return _expensesList(snapshot.data);
           }
-          return Center(child: CircularProgressIndicator());
+          return Center(child: Text('No expenses recorded'));
         },
       ),
       floatingActionButton: FloatingActionButton(

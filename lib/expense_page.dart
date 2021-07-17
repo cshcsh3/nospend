@@ -27,7 +27,7 @@ class ExpensePageState extends State<ExpensePage> {
       Expense expense =
           new Expense(amount: convertedAmount, category: selectedCategory);
       db.createExpense(expense).then((isSuccess) => {
-            if (isSuccess) {Navigator.pop(_formKey.currentState!.context, true)}
+            if (isSuccess) {Navigator.pop(context, true)}
           });
     }
   }
@@ -72,10 +72,12 @@ class ExpensePageState extends State<ExpensePage> {
                     _category(Icons.commute_outlined, 'Transport'),
                     _category(Icons.shopping_bag_outlined, 'Shopping'),
                     _category(Icons.spa_outlined, 'Personal Care'),
-                    _category(Icons.fitness_center_outlined, 'Health & Fitness'),
+                    _category(
+                        Icons.fitness_center_outlined, 'Health & Fitness'),
                     _category(Icons.videogame_asset_outlined, 'Entertainment'),
                     _category(Icons.library_books_outlined, 'Education'),
-                    _category(Icons.card_giftcard_outlined, 'Gifts & Donations'),
+                    _category(
+                        Icons.card_giftcard_outlined, 'Gifts & Donations'),
                   ]),
               sizedBoxSpace,
               Center(
