@@ -31,7 +31,8 @@ class NospendDatabase {
     CREATE TABLE expenses (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       amount REAL NOT NULL,
-      category TEXT NOT NULL
+      category TEXT NOT NULL,
+      timestamp INTEGER NOT NULL
     )
     ''');
   }
@@ -53,7 +54,8 @@ class NospendDatabase {
       return Expense(
           id: maps[i]['id'],
           amount: maps[i]['amount'],
-          category: maps[i]['category']);
+          category: maps[i]['category'],
+          timestamp: maps[i]['timestamp']);
     });
   }
 }

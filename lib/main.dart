@@ -48,17 +48,17 @@ class _HomePageState extends State<HomePage> {
 
   Widget _expensesList(List<Expense>? expenses) {
     List<Widget> widgets = [];
-    if (expenses != null) {
+    if (expenses != null && expenses.length != 0) {
       for (Expense expense in expenses) {
         Widget expenseRow = Container(
             height: 50,
-            child:
-                Text('${expense.id}: ${expense.amount} ${expense.category}'));
+            child: Text(
+                '${expense.id}: ${expense.amount} ${expense.category} ${DateTime.fromMillisecondsSinceEpoch(expense.timestamp)}'));
         widgets.add(expenseRow);
       }
       return ListView(padding: const EdgeInsets.all(20), children: widgets);
     }
-    return Text('No expenses recorded');
+    return Center(child: Text('No expenses recorded'));
   }
 
   @override
@@ -74,6 +74,7 @@ class _HomePageState extends State<HomePage> {
             return Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
+            print(snapshot.error);
             return Center(child: Text('Something went wrong'));
           }
           if (snapshot.hasData) {

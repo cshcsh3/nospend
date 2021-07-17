@@ -24,8 +24,10 @@ class ExpensePageState extends State<ExpensePage> {
         selectedCategory != null ||
         selectedCategory.isNotEmpty) {
       double convertedAmount = double.parse(amount);
-      Expense expense =
-          new Expense(amount: convertedAmount, category: selectedCategory);
+      Expense expense = new Expense(
+          amount: convertedAmount,
+          category: selectedCategory,
+          timestamp: DateTime.now().millisecondsSinceEpoch);
       db.createExpense(expense).then((isSuccess) => {
             if (isSuccess) {Navigator.pop(context, true)}
           });
