@@ -71,7 +71,7 @@ class ExpensePageState extends State<ExpensePage> {
                   crossAxisCount: 4,
                   children: <Widget>[
                     _category(Icons.fastfood_outlined, 'Food & Dining'),
-                    _category(Icons.commute_outlined, 'Transport'),
+                    _category(Icons.commute_outlined, 'Auto & Transport'),
                     _category(Icons.shopping_bag_outlined, 'Shopping'),
                     _category(Icons.spa_outlined, 'Personal Care'),
                     _category(
@@ -80,6 +80,13 @@ class ExpensePageState extends State<ExpensePage> {
                     _category(Icons.library_books_outlined, 'Education'),
                     _category(
                         Icons.card_giftcard_outlined, 'Gifts & Donations'),
+                    _category(Icons.bar_chart_outlined, 'Investments'),
+                    _category(Icons.attach_money_outlined, 'Fees & Charges'),
+                    _category(Icons.receipt_long_outlined, 'Taxes'),
+                    _category(Icons.child_care_outlined, 'Kids'),
+                    _category(Icons.build_outlined, 'Bills & Utilities'),
+                    _category(Icons.local_airport_outlined, 'Travel'),
+                    _category(Icons.add, 'Others'),
                   ]),
               sizedBoxSpace,
               Center(
