@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nospend/db.dart';
+import 'package:nospend/util.dart';
 
-import 'expense_page.dart';
 import 'model/expense.dart';
+import 'page/expense_page.dart';
 
 void main() {
   runApp(MainApp());
@@ -48,15 +50,24 @@ class _HomePageState extends State<HomePage> {
 
   Widget _expensesList(List<Expense>? expenses) {
     List<Widget> widgets = [];
+    DateFormat dateFormat = DateFormat('EEE, dd MMM yyyy, hh:mm aaa');
     if (expenses != null && expenses.length != 0) {
       for (Expense expense in expenses) {
-        Widget expenseRow = Container(
-            height: 50,
-            child: Text(
-                '${expense.id}: ${expense.amount} ${expense.category} ${DateTime.fromMillisecondsSinceEpoch(expense.timestamp)}'));
+        Widget expenseRow = Dismissible(
+            key: Key(expense.id.toString()),
+            onDismissed: (direction) {},
+            background: Container(color: Colors.red),
+            child: Container(
+                padding: const EdgeInsets.all(10),
+                child: ListTile(
+                  leading: Icon(getIconDataByCategory(expense.category)),
+                  title: Text('Spent \$${expense.amount.toStringAsFixed(2)}'),
+                  trailing: Text(
+                      'on ${dateFormat.format(DateTime.fromMillisecondsSinceEpoch(expense.timestamp))}'),
+                )));
         widgets.add(expenseRow);
       }
-      return ListView(padding: const EdgeInsets.all(20), children: widgets);
+      return ListView(children: widgets);
     }
     return Center(child: Text('No expenses recorded'));
   }

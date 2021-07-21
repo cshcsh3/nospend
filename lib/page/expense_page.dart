@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nospend/db.dart';
+import 'package:nospend/util.dart';
 
-import 'model/expense.dart';
+import '../model/expense.dart';
 
 class ExpensePage extends StatefulWidget {
   @override
@@ -70,23 +71,21 @@ class ExpensePageState extends State<ExpensePage> {
                   mainAxisSpacing: 5,
                   crossAxisCount: 4,
                   children: <Widget>[
-                    _category(Icons.fastfood_outlined, 'Food & Dining'),
-                    _category(Icons.commute_outlined, 'Auto & Transport'),
-                    _category(Icons.shopping_bag_outlined, 'Shopping'),
-                    _category(Icons.spa_outlined, 'Personal Care'),
-                    _category(
-                        Icons.fitness_center_outlined, 'Health & Fitness'),
-                    _category(Icons.videogame_asset_outlined, 'Entertainment'),
-                    _category(Icons.library_books_outlined, 'Education'),
-                    _category(
-                        Icons.card_giftcard_outlined, 'Gifts & Donations'),
-                    _category(Icons.bar_chart_outlined, 'Investments'),
-                    _category(Icons.attach_money_outlined, 'Fees & Charges'),
-                    _category(Icons.receipt_long_outlined, 'Taxes'),
-                    _category(Icons.child_care_outlined, 'Kids'),
-                    _category(Icons.build_outlined, 'Bills & Utilities'),
-                    _category(Icons.local_airport_outlined, 'Travel'),
-                    _category(Icons.add, 'Others'),
+                    _category('Food & Dining'),
+                    _category('Auto & Transport'),
+                    _category('Shopping'),
+                    _category('Personal Care'),
+                    _category('Health & Fitness'),
+                    _category('Entertainment'),
+                    _category('Education'),
+                    _category('Gifts & Donations'),
+                    _category('Investments'),
+                    _category('Fees & Charges'),
+                    _category('Taxes'),
+                    _category('Kids'),
+                    _category('Bills & Utilities'),
+                    _category('Travel'),
+                    _category('Others'),
                   ]),
               sizedBoxSpace,
               Center(
@@ -95,12 +94,12 @@ class ExpensePageState extends State<ExpensePage> {
             ])));
   }
 
-  Widget _category(IconData icon, String text) {
+  Widget _category(String text) {
     return Container(
         padding: const EdgeInsets.all(5),
         child: Column(children: <Widget>[
           IconButton(
-            icon: Icon(icon),
+            icon: Icon(getIconDataByCategory(text)),
             tooltip: text,
             color:
                 selectedCategory == text ? Colors.blueAccent : Colors.black87,
