@@ -55,7 +55,10 @@ class _HomePageState extends State<HomePage> {
       for (Expense expense in expenses) {
         Widget expenseRow = Dismissible(
             key: Key(expense.id.toString()),
-            onDismissed: (direction) {},
+            onDismissed: (direction) {
+              db.deleteExpense(expense.id);
+              setState(() {});
+            },
             background: Container(color: Colors.red),
             child: Container(
                 padding: const EdgeInsets.all(10),

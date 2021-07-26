@@ -58,4 +58,9 @@ class NospendDatabase {
           timestamp: maps[i]['timestamp']);
     });
   }
+
+  Future<void> deleteExpense(int? expenseId) async {
+    final db = await instance.database;
+    await db.delete('expenses', where: 'id = ?', whereArgs: [expenseId]);
+  }
 }
