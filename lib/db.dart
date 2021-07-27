@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'model/budget.dart';
 import 'model/expense.dart';
 
 class NospendDatabase {
@@ -33,7 +34,12 @@ class NospendDatabase {
       amount REAL NOT NULL,
       category TEXT NOT NULL,
       timestamp INTEGER NOT NULL
-    )
+    );
+    CREATE TABLE budgets (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      budget REAL NOT NULL,
+      category TEXT NOT NULL UNIQUE
+    );
     ''');
   }
 
@@ -62,5 +68,26 @@ class NospendDatabase {
   Future<void> deleteExpense(int? expenseId) async {
     final db = await instance.database;
     await db.delete('expenses', where: 'id = ?', whereArgs: [expenseId]);
+  }
+
+  Future<bool> createBudget(Budget budget) async {
+    final db = await instance.database;
+    int id = await db.insert('budgets', budget.toMap());
+    if (id == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Future<List<Budget>> getBudgets() async {
+    final db = await instance.database;
+    final List<Map<String, dynamic>> maps = await db.query('budgets');
+    return List.generate(maps.length, (i) {
+      return Budget(
+          id: maps[i]['id'],
+          budget: maps[i]['budget'],
+          category: maps[i]['category']);
+    });
   }
 }
