@@ -4,6 +4,7 @@ import 'package:nospend/db.dart';
 import 'package:nospend/util.dart';
 
 import 'model/expense.dart';
+import 'page/budget_page.dart';
 import 'page/expense_page.dart';
 
 void main() {
@@ -34,6 +35,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late NospendDatabase db;
 
+  @override
+  void initState() {
+    super.initState();
+    db = NospendDatabase.instance;
+  }
+
   void _navigateToExpensePage() async {
     await Navigator.push(
       context,
@@ -42,10 +49,29 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
-  @override
-  void initState() {
-    super.initState();
-    db = NospendDatabase.instance;
+  void _navigateToBudgetPage() async {
+    Navigator.pop(context);
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BudgetPage()),
+    );
+    setState(() {});
+  }
+
+  Widget _drawer() {
+    return Drawer(
+        child: ListView(padding: EdgeInsets.zero, children: [
+      const UserAccountsDrawerHeader(
+          accountName: Text('NoSpend'),
+          accountEmail: Text('Minimal budget tracker'),
+          currentAccountPicture:
+              const CircleAvatar(child: FlutterLogo(size: 42.0))),
+      ListTile(
+          title: const Text('Budget'),
+          onTap: () {
+            _navigateToBudgetPage();
+          })
+    ]));
   }
 
   Widget _expensesList(List<Expense>? expenses) {
@@ -97,6 +123,7 @@ class _HomePageState extends State<HomePage> {
           return Center(child: Text('No expenses recorded'));
         },
       ),
+      drawer: _drawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToExpensePage,
         tooltip: 'Add expense',
