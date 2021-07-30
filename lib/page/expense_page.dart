@@ -35,6 +35,32 @@ class ExpensePageState extends State<ExpensePage> {
     }
   }
 
+  Widget _category(String text) {
+    return Container(
+        padding: const EdgeInsets.all(5),
+        child: Column(children: <Widget>[
+          IconButton(
+            icon: Icon(getIconDataByCategory(text)),
+            tooltip: text,
+            color:
+                selectedCategory == text ? Colors.blueAccent : Colors.black87,
+            onPressed: () {
+              setState(() {
+                selectedCategory = text;
+              });
+            },
+          ),
+          Expanded(
+              child: Center(
+                  child: Text(text,
+                      style: TextStyle(
+                          fontSize: 10,
+                          color: selectedCategory == text
+                              ? Colors.blueAccent
+                              : Colors.black87))))
+        ]));
+  }
+
   @override
   Widget build(BuildContext context) {
     const sizedBoxSpace = SizedBox(height: 24);
@@ -92,31 +118,5 @@ class ExpensePageState extends State<ExpensePage> {
                   child: ElevatedButton(
                       onPressed: _onSubmit, child: Text('Submit')))
             ])));
-  }
-
-  Widget _category(String text) {
-    return Container(
-        padding: const EdgeInsets.all(5),
-        child: Column(children: <Widget>[
-          IconButton(
-            icon: Icon(getIconDataByCategory(text)),
-            tooltip: text,
-            color:
-                selectedCategory == text ? Colors.blueAccent : Colors.black87,
-            onPressed: () {
-              setState(() {
-                selectedCategory = text;
-              });
-            },
-          ),
-          Expanded(
-              child: Center(
-                  child: Text(text,
-                      style: TextStyle(
-                          fontSize: 10,
-                          color: selectedCategory == text
-                              ? Colors.blueAccent
-                              : Colors.black87))))
-        ]));
   }
 }
