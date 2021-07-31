@@ -34,12 +34,14 @@ class NospendDatabase {
       amount REAL NOT NULL,
       category TEXT NOT NULL,
       timestamp INTEGER NOT NULL
-    );
+    )
+    ''');
+    await db.execute('''
     CREATE TABLE budgets (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       budget REAL NOT NULL,
       category TEXT NOT NULL UNIQUE
-    );
+    )
     ''');
   }
 

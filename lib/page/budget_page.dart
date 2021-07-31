@@ -41,8 +41,42 @@ class BudgetPageState extends State<BudgetPage>
     });
   }
 
+  Widget _budgetList(List<Budget>? budgets) {
+    List<Widget> widgets = [];
+    if (budgets != null && budgets.length != 0) {
+      for (Budget budget in budgets) {
+        Widget budgetRow = Container(
+            key: Key(budget.id.toString()),
+            child: Container(
+                padding: const EdgeInsets.all(10),
+                child: ListTile(
+                    leading: Icon(getIconDataByCategory(budget.category)),
+                    title: Text(
+                        'Budget set \$${budget.budget.toStringAsFixed(2)}'))));
+        widgets.add(budgetRow);
+      }
+      return ListView(children: widgets);
+    }
+    return Center(child: Text('No budget recorded'));
+  }
+
   Widget _budgetOverviewTab() {
-    return Center(child: Text('Budget Overview Tab'));
+    return FutureBuilder(
+      future: db.getBudgets(),
+      builder: (BuildContext context, AsyncSnapshot<List<Budget>> snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          print(snapshot.error);
+          return Center(child: Text('Something went wrong'));
+        }
+        if (snapshot.hasData) {
+          return _budgetList(snapshot.data);
+        }
+        return Center(child: Text('No expenses recorded'));
+      },
+    );
   }
 
   void _onAddBudgetSubmit() {
@@ -55,7 +89,7 @@ class BudgetPageState extends State<BudgetPage>
       Budget budget =
           new Budget(budget: convertedBudgetAmount, category: selectedCategory);
       db.createBudget(budget).then((isSuccess) => {
-            if (isSuccess) {Navigator.pop(context, true)}
+            if (isSuccess) {_tabController.animateTo(0)}
           });
     }
   }

@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
     ]));
   }
 
-  Widget _expensesList(List<Expense>? expenses) {
+  Widget _expenseList(List<Expense>? expenses) {
     List<Widget> widgets = [];
     DateFormat dateFormat = DateFormat('EEE, dd MMM yyyy, hh:mm aaa');
     if (expenses != null && expenses.length != 0) {
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
       }
       return ListView(children: widgets);
     }
-    return Center(child: Text('No expenses recorded'));
+    return Center(child: Text('No expense recorded'));
   }
 
   @override
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
             return Center(child: Text('Something went wrong'));
           }
           if (snapshot.hasData) {
-            return _expensesList(snapshot.data);
+            return _expenseList(snapshot.data);
           }
           return Center(child: Text('No expenses recorded'));
         },
