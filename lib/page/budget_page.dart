@@ -79,7 +79,7 @@ class BudgetPageState extends State<BudgetPage>
     );
   }
 
-  void _onAddBudgetSubmit() {
+  void _onSetBudgetSubmit() {
     // Can use form validator too but not going to since it's just one field
     if (budgetAmount != null ||
         budgetAmount.isNotEmpty ||
@@ -88,7 +88,7 @@ class BudgetPageState extends State<BudgetPage>
       double convertedBudgetAmount = double.parse(budgetAmount);
       Budget budget =
           new Budget(budget: convertedBudgetAmount, category: selectedCategory);
-      db.createBudget(budget).then((isSuccess) => {
+      db.createOrUpdateBudget(budget).then((isSuccess) => {
             if (isSuccess) {_tabController.animateTo(0)}
           });
     }
@@ -120,7 +120,7 @@ class BudgetPageState extends State<BudgetPage>
         ]));
   }
 
-  Widget _addBudgetTab() {
+  Widget _setBudgetTab() {
     const sizedBoxSpace = SizedBox(height: 24);
 
     return Form(
@@ -169,18 +169,18 @@ class BudgetPageState extends State<BudgetPage>
           sizedBoxSpace,
           Center(
               child: ElevatedButton(
-                  onPressed: _onAddBudgetSubmit, child: Text('Submit')))
+                  onPressed: _onSetBudgetSubmit, child: Text('Submit')))
         ]));
   }
 
   Widget _tabHelper(int index) {
     if (index == 0) return _budgetOverviewTab();
-    return _addBudgetTab();
+    return _setBudgetTab();
   }
 
   @override
   Widget build(BuildContext context) {
-    final tabs = ['Budget Overview', 'Add Budget'];
+    final tabs = ['Budget Overview', 'Set Budget'];
 
     return Scaffold(
         appBar: AppBar(

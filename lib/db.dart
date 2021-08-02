@@ -72,14 +72,37 @@ class NospendDatabase {
     await db.delete('expenses', where: 'id = ?', whereArgs: [expenseId]);
   }
 
-  Future<bool> createBudget(Budget budget) async {
+  Future<bool> createOrUpdateBudget(Budget budget) async {
     final db = await instance.database;
-    int id = await db.insert('budgets', budget.toMap());
-    if (id == 0) {
-      return false;
+    Map<String, dynamic> row = {
+      'budget': budget.budget,
+      'category': budget.category
+    };
+    final List<Map<String, dynamic>> budgets = await db
+        .query('budgets', where: 'category = ?', whereArgs: [budget.category]);
+    int id = 0;
+    if (budgets.length == 0) {
+      id = await db.insert('budgets', budget.toMap());
     } else {
+      final Map<String, dynamic> row = {
+        'id': budgets[0]['id'],
+        'budget': budget.budget,
+        'category': budget.category
+      };
+      print(budgets);
+      print(row);
+      id = await db.update('budgets', row,
+          where: 'id = ?', whereArgs: [budgets[0]['id']]);
+    }
+    if (id > 0) {
       return true;
     }
+    return false;
+  }
+
+  Future<void> deleteBudget(int? budgetId) async {
+    final db = await instance.database;
+    await db.delete('budgets', where: 'id = ?', whereArgs: [budgetId]);
   }
 
   Future<List<Budget>> getBudgets() async {
