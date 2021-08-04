@@ -51,8 +51,9 @@ class BudgetPageState extends State<BudgetPage>
                 padding: const EdgeInsets.all(10),
                 child: ListTile(
                     leading: Icon(getIconDataByCategory(budget.category)),
+                    trailing: Text('${budget.category}'),
                     title: Text(
-                        'Budget set \$${budget.budget.toStringAsFixed(2)}'))));
+                        'Spent \$${budget.totalSpending?.toStringAsFixed(2) ?? '0'} of \$${budget.budget.toStringAsFixed(2)}'))));
         widgets.add(budgetRow);
       }
       return ListView(children: widgets);

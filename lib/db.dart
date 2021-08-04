@@ -57,13 +57,13 @@ class NospendDatabase {
 
   Future<List<Expense>> getExpenses() async {
     final db = await instance.database;
-    final List<Map<String, dynamic>> maps = await db.query('expenses');
-    return List.generate(maps.length, (i) {
+    final List<Map<String, dynamic>> results = await db.query('expenses');
+    return List.generate(results.length, (i) {
       return Expense(
-          id: maps[i]['id'],
-          amount: maps[i]['amount'],
-          category: maps[i]['category'],
-          timestamp: maps[i]['timestamp']);
+          id: results[i]['id'],
+          amount: results[i]['amount'],
+          category: results[i]['category'],
+          timestamp: results[i]['timestamp']);
     });
   }
 
@@ -89,8 +89,6 @@ class NospendDatabase {
         'budget': budget.budget,
         'category': budget.category
       };
-      print(budgets);
-      print(row);
       id = await db.update('budgets', row,
           where: 'id = ?', whereArgs: [budgets[0]['id']]);
     }
@@ -107,12 +105,35 @@ class NospendDatabase {
 
   Future<List<Budget>> getBudgets() async {
     final db = await instance.database;
-    final List<Map<String, dynamic>> maps = await db.query('budgets');
-    return List.generate(maps.length, (i) {
+
+    // Get all budgets
+    final List<Map<String, dynamic>> budgets = await db.query('budgets');
+
+    // Get current month total expenses by category
+    DateTime now = DateTime.now();
+    DateTime startingDatetime = new DateTime(now.year, now.month, 1);
+    DateTime endingDatetime = (now.month < 12)
+        ? new DateTime(now.year, now.month + 1, 0)
+        : new DateTime(now.year + 1, 1, 0);
+
+    int startingTimestamp = startingDatetime.millisecondsSinceEpoch;
+    int endingTimestamp = endingDatetime.millisecondsSinceEpoch;
+
+    final List<Map<String, dynamic>> expenses = await db.rawQuery('''
+        SELECT expenses.category as category, SUM(expenses.amount) AS total_spending
+        FROM budgets
+        LEFT JOIN expenses ON budgets.category = expenses.category
+        WHERE expenses.timestamp >= ? AND expenses.timestamp <= ?
+        GROUP BY expenses.category
+        ''', [startingTimestamp, endingTimestamp]);
+
+    return List.generate(budgets.length, (i) {
       return Budget(
-          id: maps[i]['id'],
-          budget: maps[i]['budget'],
-          category: maps[i]['category']);
+          id: budgets[i]['id'],
+          budget: budgets[i]['budget'],
+          category: budgets[i]['category'],
+          totalSpending: expenses.firstWhere((expense) =>
+              expense['category'] == budgets[i]['category'])['total_spending']);
     });
   }
 }
