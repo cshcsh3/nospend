@@ -101,15 +101,10 @@ class _HomePageState extends State<HomePage> {
     return Center(child: Text('No expense recorded'));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: FutureBuilder(
-        future: db.getExpenses(),
-        builder: (BuildContext context, AsyncSnapshot<List<Expense>> snapshot) {
+  Widget _body() {
+    return FutureBuilder(
+        future: Future.wait([db.getExpenses(0), db.getTotalExpensesMonth()]),
+        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return Center(child: CircularProgressIndicator());
           }
@@ -118,11 +113,19 @@ class _HomePageState extends State<HomePage> {
             return Center(child: Text('Something went wrong'));
           }
           if (snapshot.hasData) {
-            return _expenseList(snapshot.data);
+            return _expenseList(snapshot.data![0]);
           }
           return Center(child: Text('No expenses recorded'));
-        },
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
       ),
+      body: _body(),
       drawer: _drawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToExpensePage,
