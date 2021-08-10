@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 Map<String, IconData> categoryIcons = {
   'Food & Dining': Icons.fastfood_outlined,
@@ -24,4 +25,8 @@ IconData? getIconDataByCategory(String category) {
   } else {
     return Icons.help_outline_outlined;
   }
+}
+
+String getCurrentMonth() {
+  return new DateFormat.MMMM().format(new DateTime.now());
 }

@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
     ]));
   }
 
-  Widget _expenseList(List<Expense>? expenses) {
+  Widget _expenseList(List<Expense>? expenses, double totalSpending) {
     List<Widget> widgets = [];
     DateFormat dateFormat = DateFormat('EEE, dd MMM yyyy, hh:mm aaa');
     if (expenses != null && expenses.length != 0) {
@@ -96,7 +96,14 @@ class _HomePageState extends State<HomePage> {
                 )));
         widgets.add(expenseRow);
       }
-      return ListView(children: widgets);
+      const sizedBoxSpace = SizedBox(height: 24);
+      return Column(children: [
+        sizedBoxSpace,
+        Text(
+            'Total Expenses for ${getCurrentMonth()}: \$${totalSpending.toStringAsFixed(2)}'),
+        sizedBoxSpace,
+        Expanded(child: ListView(children: widgets))
+      ]);
     }
     return Center(child: Text('No expense recorded'));
   }
@@ -113,7 +120,7 @@ class _HomePageState extends State<HomePage> {
             return Center(child: Text('Something went wrong'));
           }
           if (snapshot.hasData) {
-            return _expenseList(snapshot.data![0]);
+            return _expenseList(snapshot.data![0], snapshot.data![1]);
           }
           return Center(child: Text('No expenses recorded'));
         });
