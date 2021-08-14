@@ -56,7 +56,13 @@ class BudgetPageState extends State<BudgetPage>
                         'Spent \$${budget.totalSpending?.toStringAsFixed(2) ?? '0'} of \$${budget.budget.toStringAsFixed(2)}'))));
         widgets.add(budgetRow);
       }
-      return ListView(children: widgets);
+      const sizedBoxSpace = SizedBox(height: 24);
+      return Column(children: [
+        sizedBoxSpace,
+        Text('Budget Overview for ${getCurrentMonth()}'),
+        sizedBoxSpace,
+        Expanded(child: ListView(children: widgets))
+      ]);
     }
     return Center(child: Text('No budget recorded'));
   }

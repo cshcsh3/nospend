@@ -61,11 +61,11 @@ class _HomePageState extends State<HomePage> {
   Widget _drawer() {
     return Drawer(
         child: ListView(padding: EdgeInsets.zero, children: [
-      const UserAccountsDrawerHeader(
+      UserAccountsDrawerHeader(
           accountName: Text('NoSpend'),
           accountEmail: Text('Minimal budget tracker'),
           currentAccountPicture:
-              const CircleAvatar(child: FlutterLogo(size: 42.0))),
+              CircleAvatar(child: Image.asset('images/logo.png', width: 50))),
       ListTile(
           title: const Text('Budget'),
           onTap: () {
