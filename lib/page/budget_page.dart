@@ -44,6 +44,10 @@ class BudgetPageState extends State<BudgetPage>
   Widget _budgetList(List<Budget>? budgets) {
     List<Widget> widgets = [];
     if (budgets != null && budgets.length != 0) {
+      double totalBudget = budgets.fold(0, (sum, item) => sum + item.budget);
+      double totalBudgetSpending =
+          budgets.fold(0, (sum, item) => sum + (item.totalSpending ?? 0));
+
       for (Budget budget in budgets) {
         Widget budgetRow = Container(
             key: Key(budget.id.toString()),
@@ -57,9 +61,13 @@ class BudgetPageState extends State<BudgetPage>
         widgets.add(budgetRow);
       }
       const sizedBoxSpace = SizedBox(height: 24);
+      const smallSizedBoxSpace = SizedBox(height: 8);
       return Column(children: [
         sizedBoxSpace,
         Text('Budget Overview for ${getCurrentMonth()}'),
+        smallSizedBoxSpace,
+        Text(
+            'Spent \$${totalBudgetSpending.toStringAsFixed(2)} out of \$${totalBudget.toStringAsFixed(2)} so far'),
         sizedBoxSpace,
         Expanded(child: ListView(children: widgets))
       ]);
@@ -109,7 +117,7 @@ class BudgetPageState extends State<BudgetPage>
             icon: Icon(getIconDataByCategory(text)),
             tooltip: text,
             color:
-                selectedCategory == text ? Colors.blueAccent : Colors.black87,
+                selectedCategory == text ? Colors.indigoAccent : Colors.black87,
             onPressed: () {
               setState(() {
                 selectedCategory = text;
@@ -122,7 +130,7 @@ class BudgetPageState extends State<BudgetPage>
                       style: TextStyle(
                           fontSize: 10,
                           color: selectedCategory == text
-                              ? Colors.blueAccent
+                              ? Colors.indigoAccent
                               : Colors.black87))))
         ]));
   }

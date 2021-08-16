@@ -43,7 +43,7 @@ class ExpensePageState extends State<ExpensePage> {
             icon: Icon(getIconDataByCategory(text)),
             tooltip: text,
             color:
-                selectedCategory == text ? Colors.blueAccent : Colors.black87,
+                selectedCategory == text ? Colors.indigoAccent : Colors.black87,
             onPressed: () {
               setState(() {
                 selectedCategory = text;
@@ -56,7 +56,7 @@ class ExpensePageState extends State<ExpensePage> {
                       style: TextStyle(
                           fontSize: 10,
                           color: selectedCategory == text
-                              ? Colors.blueAccent
+                              ? Colors.indigoAccent
                               : Colors.black87))))
         ]));
   }
